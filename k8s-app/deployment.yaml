@@ -1,0 +1,25 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pg-checker-application
+  namespace: application
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      app: pg-checker-application
+  template:
+    metadata:
+      annotations:
+        build-at: "$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+      labels:
+        app: pg-checker-application
+    spec:
+      containers:
+      - name: pg-checker-application
+        image: ruancasas/pg-checker:main
+        imagePullPolicy: Always
+        envFrom:
+        - secretRef:
+            name: application-db
